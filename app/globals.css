@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -30,4 +32,23 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+*,
+*::before,
+*::after {
+  font-family: "Exo", sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-bgDark text-text;
+}
+
+h1 {
+  @apply text-5xl font-semibold;
+}
+
+.container-mt {
+  @apply mt-24;
 }
