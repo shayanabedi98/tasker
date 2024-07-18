@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import Lists from "@/components/dashboard/Lists";
 import prisma from "@/lib/prismadb";
 
 export default async function Dashboard() {
@@ -31,9 +30,6 @@ export default async function Dashboard() {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="mx-auto flex xl:w-[1280px]">
-        <Lists tasks={tasks} lists={lists} />
-      </div>
     </div>
   );
 }
