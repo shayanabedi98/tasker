@@ -7,7 +7,6 @@ import Lists from "@/components/dashboard/Lists";
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
   let lists;
-  let tasks;
 
   if (!session) {
     redirect("/sign-in");
@@ -20,14 +19,6 @@ export default async function Dashboard() {
   } catch (error) {
     throw error;
   }
-
-  // try {
-  //   tasks = await prisma.task.findMany({
-  //     where: { List: { authorEmail: session?.user?.email! } },
-  //   });
-  // } catch (error) {
-  //   throw error;
-  // }
 
   return (
     <div className="flex flex-col items-center justify-center">

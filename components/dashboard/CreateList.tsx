@@ -24,14 +24,14 @@ export default function CreateList({
         {errorMessage && (
           <div className="absolute bottom-1 left-0 flex w-full items-center justify-center gap-x-2">
             <span>Field cannot be empty</span>
-            <IoIosAlert className="text-red-500 text-2xl" />
+            <IoIosAlert className="text-2xl text-red-500" />
           </div>
         )}
         <p className="text-2xl font-semibold">Create List</p>
 
         <p>{"(Max. 20 characters)"}</p>
         <input
-          className="rounded-md text-black"
+          className="rounded-rm text-black"
           type="text"
           onChange={(e) => handleListInputChange(e.target.value)}
           value={inputValue}

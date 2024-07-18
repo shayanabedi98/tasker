@@ -53,6 +53,42 @@ export default function Lists({ lists }: Props) {
     }
   };
 
+  const handleEditList = async (listName: string, newListName: string) => {
+    if (!listName) {
+      setErrorMessage(true);
+    } else {
+      setErrorMessage(false);
+    }
+
+    if (listName) {
+      try {
+        const res = await fetch("/api/lists", {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            listName,
+            newListName,
+          }),
+        });
+
+        if (res.ok) {
+          setListsData((prev) =>
+            prev.map((i) =>
+              i.name === listName ? { ...i, name: newListName } : i,
+            ),
+          );
+          setIsEdit(false);
+          setClickedListName("");
+        }
+      } catch (error) {
+        setIsEdit(false);
+        setClickedListName("");
+      }
+    }
+  };
+
   const handleDeleteList = async (id: string, name: string) => {
     try {
       setClickedListName(name);
@@ -86,7 +122,10 @@ export default function Lists({ lists }: Props) {
     setIsCreate(!isCreate);
   };
 
-  const handleIsEdit = (name: string) => {};
+  const handleIsEdit = (name: string) => {
+    setIsEdit(!isEdit);
+    setClickedListName(name);
+  };
 
   return (
     <div className="mt-16">
@@ -113,6 +152,8 @@ export default function Lists({ lists }: Props) {
       <div className="mt-16 grid grid-cols-4 gap-10">
         {listsData.map((i, index) => (
           <ListItem
+            handleEditList={handleEditList}
+            isEdit={isEdit}
             clickedListName={clickedListName}
             handleIsEdit={handleIsEdit}
             key={index}

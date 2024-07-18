@@ -49,16 +49,16 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
-  const { editedName, id } = await req.json();
+  const { listName, newListName } = await req.json();
 
   try {
-    const list = await prisma.list.update({
-      where: { id },
+    const editList = await prisma.list.update({
+      where: { name: listName },
       data: {
-        name: editedName,
+        name: newListName,
       },
     });
-    return NextResponse.json(list);
+    return NextResponse.json(editList);
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Could not update list" });
