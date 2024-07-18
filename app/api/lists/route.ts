@@ -66,14 +66,36 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const session = await getServerSession(authOptions);
+
+  //   if (!session) {
+  //     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  //   }
+
   const { id } = await req.json();
   try {
-    const list = await prisma.list.delete({
+    const list = await prisma.list.findUnique({
       where: { id },
     });
-    return NextResponse.json(list);
+
+    if (!list) {
+      return NextResponse.json({ message: "List not found" }, { status: 404 });
+    }
+
+    const deleteTasks = await prisma.task.deleteMany({
+      where: { listName: list.name },
+    });
+
+    const deleteList = await prisma.list.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({
+      list: deleteList,
+      tasks: deleteTasks,
+    });
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: "Could not delete" });
+    return NextResponse.json({ message: "Could not delete" }, { status: 500 });
   }
 }

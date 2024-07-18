@@ -13,8 +13,8 @@ const config: Config = {
         bgLight: "#191919",
         text: "#FFFDFF",
         primary: "#2173A3",
-        secondary: "#185477"
-      }
+        secondary: "#185477",
+      },
     },
   },
   plugins: [],

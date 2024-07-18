@@ -41,7 +41,7 @@ export default function ListForm({ handleAddNewList }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-secondary flex h-12 items-center justify-between pl-4"
+      className="flex h-12 items-center justify-between bg-secondary pl-4"
     >
       <input
         placeholder="Create New List"
@@ -50,7 +50,7 @@ export default function ListForm({ handleAddNewList }: Props) {
         value={newListName}
         onChange={(e) => setNewListName(e.target.value)}
       />
-      <button className="bg-bgDark h-full w-20 p-2 font-semibold" type="submit">
+      <button className="h-full w-20 bg-bgDark p-2 font-semibold" type="submit">
         Create
       </button>
     </form>
