@@ -23,10 +23,10 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const { newListName } = await req.json();
+  const { inputValue } = await req.json();
   const session = await getServerSession(authOptions);
 
-  if (!newListName) {
+  if (!inputValue) {
     return NextResponse.json({ message: "Missing fields" });
   }
 
@@ -37,8 +37,8 @@ export async function POST(req: Request) {
   try {
     const list = await prisma.list.create({
       data: {
-        name: newListName,
-        authorEmail: "abedishayan@gmail.com",
+        name: inputValue,
+        authorEmail: session?.user?.email as string,
       },
     });
     return NextResponse.json(list);
@@ -72,10 +72,10 @@ export async function DELETE(req: Request) {
   //     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   //   }
 
-  const { id } = await req.json();
+  const { name } = await req.json();
   try {
     const list = await prisma.list.findUnique({
-      where: { id },
+      where: { name },
     });
 
     if (!list) {
@@ -87,7 +87,7 @@ export async function DELETE(req: Request) {
     });
 
     const deleteList = await prisma.list.delete({
-      where: { id },
+      where: { name },
     });
 
     return NextResponse.json({
