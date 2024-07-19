@@ -53,7 +53,7 @@ export async function PUT(req: Request) {
 
   try {
     const editList = await prisma.list.update({
-      where: { name: listName },
+      where: { name: listName, authorEmail: "abedishayan@gmail.com" },
       data: {
         name: newListName,
       },
@@ -75,7 +75,7 @@ export async function DELETE(req: Request) {
   const { name } = await req.json();
   try {
     const list = await prisma.list.findUnique({
-      where: { name },
+      where: { name, authorEmail: "abedishayan@gmail.com" },
     });
 
     if (!list) {
@@ -87,7 +87,7 @@ export async function DELETE(req: Request) {
     });
 
     const deleteList = await prisma.list.delete({
-      where: { name },
+      where: { name, authorEmail: "abedishayan@gmail.com" },
     });
 
     return NextResponse.json({

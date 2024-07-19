@@ -28,6 +28,11 @@ export default function Lists({ lists }: Props) {
       setErrorMessage(false);
     }
 
+    if (listsData.some((i) => i.name === inputValue)) {
+      alert("List already exists");
+      return;
+    }
+
     if (inputValue) {
       try {
         const res = await fetch("/api/lists", {
@@ -49,18 +54,21 @@ export default function Lists({ lists }: Props) {
           setInputValue("");
           setIsCreate(false);
         }
-      } catch (error) {}
+      } catch (error) {
+        setInputValue("");
+        setIsCreate(false);
+      }
     }
   };
 
   const handleEditList = async (listName: string, newListName: string) => {
-    if (!listName) {
+    if (!newListName) {
       setErrorMessage(true);
     } else {
       setErrorMessage(false);
     }
 
-    if (listName) {
+    if (newListName) {
       try {
         const res = await fetch("/api/lists", {
           method: "PUT",
@@ -152,6 +160,7 @@ export default function Lists({ lists }: Props) {
       <div className="mt-16 grid grid-cols-4 gap-10">
         {listsData.map((i, index) => (
           <ListItem
+            errorMessage={errorMessage}
             handleEditList={handleEditList}
             isEdit={isEdit}
             clickedListName={clickedListName}

@@ -28,7 +28,6 @@ export default function CreateList({
           </div>
         )}
         <p className="text-2xl font-semibold">Create List</p>
-
         <p>{"(Max. 20 characters)"}</p>
         <input
           className="rounded-rm text-black"

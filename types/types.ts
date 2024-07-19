@@ -8,9 +8,9 @@ export type ListType = {
   authorEmail?: string;
 }[];
 
-// export type TasksType = {
-//   id?: string;
-//   title: string;
-//   description?: string | null;
-//   listName: string | null;
-// }[];
+export type TasksType = {
+  id?: string;
+  title: string;
+  description?: string | null;
+  listName: string | null;
+}[];

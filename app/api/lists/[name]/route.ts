@@ -14,6 +14,7 @@ export async function POST(
         title,
         description,
         listName: name,
+        authorEmail: "abedishayan@gmail.com"
       },
     });
     return NextResponse.json(task);
