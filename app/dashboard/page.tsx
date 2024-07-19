@@ -13,8 +13,11 @@ export default async function Dashboard() {
   }
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { email: session?.user?.email as string },
+    });
     lists = await prisma.list.findMany({
-      where: { authorEmail: session?.user?.email! },
+      where: { userId: user?.id },
     });
   } catch (error) {
     throw error;

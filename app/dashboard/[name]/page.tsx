@@ -28,7 +28,7 @@ export default async function ListPage({ params }: Props) {
   return (
     <div>
       <h1>{name}</h1>
-      <Tasks tasks={tasks!} />
+      <Tasks tasks={tasks!} endpointName={name} />
     </div>
   );
 }

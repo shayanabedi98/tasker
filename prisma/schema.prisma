@@ -85,15 +85,15 @@ model Task {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
-  List        List?   @relation(fields: [authorEmail], references: [authorEmail])
+  listId      String  @db.ObjectId
+  List        List    @relation(fields: [listId], references: [id])
   listName    String
-  authorEmail String
 }
 
 model List {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  tasks       Task[]
-  User        User?  @relation(fields: [authorEmail], references: [email])
-  authorEmail String @unique
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  tasks  Task[]
+  userId String @db.ObjectId
+  User   User   @relation(fields: [userId], references: [id])
 }

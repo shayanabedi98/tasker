@@ -26,3 +26,7 @@ h2 {
 .container-mt {
   @apply mt-24;
 }
+
+input {
+  @apply text-black;
+}

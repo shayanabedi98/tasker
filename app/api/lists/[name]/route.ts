@@ -1,20 +1,23 @@
 import prisma from "@/lib/prismadb";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(
   req: Request,
   { params }: { params: { name: string } },
 ) {
-  const { title, description } = await req.json();
+  const session = await getServerSession(authOptions);
+  const { inputValues } = await req.json();
   const { name } = params;
 
   try {
     const task = await prisma.task.create({
       data: {
-        title,
-        description,
+        title: inputValues.title,
+        description: inputValues.description,
         listName: name,
-        authorEmail: "abedishayan@gmail.com"
+        authorEmail: session?.user?.email as string,
       },
     });
     return NextResponse.json(task);

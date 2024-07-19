@@ -34,7 +34,7 @@ export default function ListItem({
   const [editedNameSample, setEditedNameSample] = useState("");
   return (
     <div>
-      {isEdit && (
+      {isEdit && name === clickedListName && (
         <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-slate-600 bg-opacity-50">
           <div className="relative flex h-96 w-64 flex-col items-center justify-center gap-3 rounded-md bg-bgLight shadow-md">
             {errorMessage && (
@@ -80,7 +80,9 @@ export default function ListItem({
           {isLoading && clickedListName == name ? (
             <AiOutlineLoading3Quarters className="animate-spin" />
           ) : (
-            <Link className="lg:hover:underline" href={`/dashboard/${name}`}>{name}</Link>
+            <Link className="lg:hover:underline" href={`/dashboard/${name}`}>
+              {name}
+            </Link>
           )}
         </p>
         <div className="absolute right-1 top-1 flex gap-2 text-3xl">

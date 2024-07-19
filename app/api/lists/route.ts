@@ -12,8 +12,11 @@ export async function GET(req: Request) {
   //   }
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { email: session?.user?.email as string },
+    });
     const lists = await prisma.list.findMany({
-      where: { authorEmail: "abedishayan@gmail.com" },
+      where: { userId: user?.id },
     });
     return NextResponse.json(lists);
   } catch (error) {
@@ -35,10 +38,18 @@ export async function POST(req: Request) {
   //   }
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { email: session?.user?.email as string },
+    });
+
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
     const list = await prisma.list.create({
       data: {
+        userId: user?.id,
         name: inputValue,
-        authorEmail: session?.user?.email as string,
       },
     });
     return NextResponse.json(list);
@@ -49,16 +60,23 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const session = await getServerSession(authOptions);
   const { listName, newListName } = await req.json();
 
   try {
-    const editList = await prisma.list.update({
-      where: { name: listName, authorEmail: "abedishayan@gmail.com" },
+    const user = await prisma.user.findUnique({
+      where: { email: session?.user?.email as string },
+    });
+    const findList = await prisma.list.findFirst({
+      where: { name: listName, userId: user?.id },
+    });
+    const updateList = await prisma.list.update({
+      where: { id: findList?.id},
       data: {
         name: newListName,
       },
     });
-    return NextResponse.json(editList);
+    return NextResponse.json(updateList);
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Could not update list" });
@@ -67,15 +85,19 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
   const session = await getServerSession(authOptions);
+  const { name } = await req.json();
 
   //   if (!session) {
   //     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   //   }
 
-  const { name } = await req.json();
   try {
-    const list = await prisma.list.findUnique({
-      where: { name, authorEmail: "abedishayan@gmail.com" },
+    const user = await prisma.user.findUnique({
+      where: { email: session?.user?.email as string },
+    });
+
+    const list = await prisma.list.findFirst({
+      where: { userId: user?.id, name: name },
     });
 
     if (!list) {
@@ -87,7 +109,7 @@ export async function DELETE(req: Request) {
     });
 
     const deleteList = await prisma.list.delete({
-      where: { name, authorEmail: "abedishayan@gmail.com" },
+      where: { name, id: list.id },
     });
 
     return NextResponse.json({
