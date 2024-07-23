@@ -105,7 +105,7 @@ export async function DELETE(req: Request) {
     }
 
     const deleteTasks = await prisma.task.deleteMany({
-      where: { listName: list.name },
+      where: { listName: list.name, listId: list.id },
     });
 
     const deleteList = await prisma.list.delete({

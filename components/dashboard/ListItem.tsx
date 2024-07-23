@@ -75,7 +75,7 @@ export default function ListItem({
           </div>
         </div>
       )}
-      <div className="relative flex h-48 w-48 items-center justify-center rounded-md border-2 border-secondary bg-primary p-1 text-center transition lg:hover:scale-105">
+      <div className="relative flex h-48 w-48 items-center justify-center rounded-md border-2 border-secondary bg-primary p-1 text-center shadow-md shadow-neutral-800 transition lg:hover:scale-105">
         <p className="break-all text-2xl font-semibold">
           {isLoading && clickedListName == name ? (
             <AiOutlineLoading3Quarters className="animate-spin" />

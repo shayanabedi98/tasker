@@ -20,8 +20,16 @@ export default async function ListPage({ params }: Props) {
   }
 
   try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user?.email as string },
+    });
+
+    const list = await prisma.list.findFirst({
+      where: { name: name, userId: user?.id },
+    });
+
     tasks = await prisma.task.findMany({
-      where: { listName: name, authorEmail: session.user?.email as string },
+      where: { listName: name, listId: list?.id },
     });
   } catch (error) {}
 

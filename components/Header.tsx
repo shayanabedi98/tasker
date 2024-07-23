@@ -11,7 +11,7 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <header className="flex justify-between py-10">
+    <header className="flex justify-between py-10 border-b">
       <Link className="flex items-center gap-2" href={"/"}>
         <FaList className="rounded-md bg-primary p-1 text-4xl" />
         <span className="text-4xl font-bold">Tasker</span>

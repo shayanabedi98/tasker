@@ -137,15 +137,7 @@ export default function Lists({ lists }: Props) {
 
   return (
     <div className="mt-16">
-      <div className="flex justify-center gap-4">
-        <h2>Create New List</h2>
-        <button
-          onClick={handleIsCreate}
-          className="rounded-md border-2 border-secondary bg-primary text-4xl"
-        >
-          <FiPlus />
-        </button>
-      </div>
+      <div className="flex justify-center gap-4"></div>
       {isCreate && (
         <div className="flex">
           <CreateList
@@ -172,6 +164,12 @@ export default function Lists({ lists }: Props) {
             name={i.name}
           />
         ))}
+        <button
+          onClick={handleIsCreate}
+          className="relative flex h-48 w-48 items-center justify-center rounded-md border-2 border-primary bg-secondary p-1 text-center text-4xl shadow-md shadow-neutral-800 transition lg:hover:scale-105 lg:hover:bg-primary"
+        >
+          <FiPlus />
+        </button>
       </div>
     </div>
   );
