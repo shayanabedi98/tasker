@@ -6,6 +6,8 @@ import ListItem from "./ListItem";
 import { v4 as uuidv4 } from "uuid";
 import CreateList from "./CreateList";
 import { FiPlus } from "react-icons/fi";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type Props = {
   lists: ListType;
@@ -19,6 +21,7 @@ export default function Lists({ lists }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [clickedListName, setClickedListName] = useState("");
+  const router = useRouter();
 
   const handleAddNewList = async () => {
     if (!inputValue.trim()) {
@@ -29,12 +32,13 @@ export default function Lists({ lists }: Props) {
     }
 
     if (listsData.some((i) => i.name === inputValue)) {
-      alert("List already exists");
+      toast.error("List name already exists. Pick a new one :)");
       return;
     }
 
     if (inputValue) {
       try {
+        toast.loading("Loading", { duration: 500 });
         const res = await fetch("/api/lists", {
           method: "POST",
           headers: {
@@ -46,6 +50,7 @@ export default function Lists({ lists }: Props) {
         });
 
         if (res.ok) {
+          toast.success("Created new list.");
           const newList = {
             id: uuidv4(),
             name: inputValue,
@@ -53,6 +58,7 @@ export default function Lists({ lists }: Props) {
           setListsData((prev) => [...prev, newList]);
           setInputValue("");
           setIsCreate(false);
+          router.refresh();
         }
       } catch (error) {
         setInputValue("");
@@ -66,6 +72,11 @@ export default function Lists({ lists }: Props) {
       setErrorMessage(true);
     } else {
       setErrorMessage(false);
+    }
+
+    if (listsData.some((i) => i.name === newListName)) {
+      toast.error("List name already exists. Pick a new one :)");
+      return;
     }
 
     if (newListName) {
@@ -82,6 +93,7 @@ export default function Lists({ lists }: Props) {
         });
 
         if (res.ok) {
+          toast.success("Updated list");
           setListsData((prev) =>
             prev.map((i) =>
               i.name === listName ? { ...i, name: newListName } : i,
@@ -89,6 +101,7 @@ export default function Lists({ lists }: Props) {
           );
           setIsEdit(false);
           setClickedListName("");
+          router.refresh();
         }
       } catch (error) {
         setIsEdit(false);
@@ -98,27 +111,35 @@ export default function Lists({ lists }: Props) {
   };
 
   const handleDeleteList = async (id: string, name: string) => {
-    try {
-      setClickedListName(name);
-      setIsLoading(true);
-      const res = await fetch("/api/lists", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-        }),
-      });
+    const confirmed = window.confirm(
+      "Are you sure you want do delete this list and all of its tasks?",
+    );
 
-      if (res.ok) {
+    if (confirmed) {
+      try {
+        setClickedListName(name);
+        setIsLoading(true);
+        const res = await fetch("/api/lists", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+          }),
+        });
+
+        if (res.ok) {
+          setIsLoading(false);
+          setClickedListName("");
+          setListsData((prev) => prev.filter((list) => list.name !== name));
+          router.refresh();
+          toast.success("List deleted");
+        }
+      } catch (error) {
         setIsLoading(false);
         setClickedListName("");
-        setListsData((prev) => prev.filter((list) => list.name !== name));
       }
-    } catch (error) {
-      setIsLoading(false);
-      setClickedListName("");
     }
   };
 
@@ -166,7 +187,7 @@ export default function Lists({ lists }: Props) {
         ))}
         <button
           onClick={handleIsCreate}
-          className="relative flex h-48 w-48 items-center justify-center rounded-md border-2 border-primary bg-secondary p-1 text-center text-4xl shadow-md shadow-neutral-800 transition lg:hover:scale-105 lg:hover:bg-primary"
+          className="flex h-48 w-48 items-center justify-center rounded-md border-2 border-primary bg-secondary p-1 text-center text-4xl shadow-md shadow-neutral-800 transition lg:hover:scale-105 lg:hover:bg-primary"
         >
           <FiPlus />
         </button>

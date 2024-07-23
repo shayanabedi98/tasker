@@ -66,7 +66,7 @@ export async function PUT(
 ) {
   const session = await getServerSession(authOptions);
   const { name } = params;
-  const { values, taskId: id } = await req.json();
+  const { values, taskName } = await req.json();
 
   try {
     const user = await prisma.user.findUnique({
@@ -80,8 +80,12 @@ export async function PUT(
       return NextResponse.json({ message: "Could not find list" });
     }
 
+    const task = await prisma.task.findFirst({
+      where: { listId: list?.id, title: taskName },
+    });
+
     const updateTask = await prisma.task.update({
-      where: { id, listId: list?.id },
+      where: { id: task?.id, listId: list?.id },
       data: {
         title: values.title,
         description: values.description,
@@ -100,9 +104,9 @@ export async function DELETE(
 ) {
   const session = await getServerSession(authOptions);
   const { name } = params;
-  const { taskId } = await req.json();
+  const { taskName } = await req.json();
 
-  if (!taskId) {
+  if (!taskName) {
     return NextResponse.json({ message: "Task ID not found" });
   }
 
@@ -115,12 +119,16 @@ export async function DELETE(
       where: { name, userId: user?.id },
     });
 
-    const deletePost = await prisma.task.delete({
-      where: { listId: list?.id, id: taskId },
+    const task = await prisma.task.findFirst({
+      where: { listId: list?.id, title: taskName },
     });
-    return NextResponse.json(deletePost);
+
+    const deleteTask = await prisma.task.delete({
+      where: { listId: list?.id, id: task?.id },
+    });
+    return NextResponse.json(deleteTask);
   } catch (error) {
     console.log(error);
-    return NextResponse.json({message: "Could not delete task"})
+    return NextResponse.json({ message: "Could not delete task" });
   }
 }

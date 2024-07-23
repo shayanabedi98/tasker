@@ -34,8 +34,8 @@ export default async function ListPage({ params }: Props) {
   } catch (error) {}
 
   return (
-    <div>
-      <h1>{name}</h1>
+    <div className="flex flex-col items-center justify-center">
+      <h1>{decodeURIComponent(name)}</h1>
       <Tasks tasks={tasks!} endpointName={name} />
     </div>
   );

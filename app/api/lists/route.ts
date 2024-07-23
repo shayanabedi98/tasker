@@ -67,16 +67,22 @@ export async function PUT(req: Request) {
     const user = await prisma.user.findUnique({
       where: { email: session?.user?.email as string },
     });
-    const findList = await prisma.list.findFirst({
+    const list = await prisma.list.findFirst({
       where: { name: listName, userId: user?.id },
     });
     const updateList = await prisma.list.update({
-      where: { id: findList?.id},
+      where: { id: list?.id },
       data: {
         name: newListName,
       },
     });
-    return NextResponse.json(updateList);
+    const updateTaskInfoInList = await prisma.task.updateMany({
+      where: { listId: list?.id, listName },
+      data: {
+        listName: newListName,
+      },
+    });
+    return NextResponse.json({ list: updateList, task: updateTaskInfoInList });
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Could not update list" });
