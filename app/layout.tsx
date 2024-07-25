@@ -24,7 +24,7 @@ export default function RootLayout({
         <div className="mx-auto min-h-screen max-w-screen-xl">
           <NextAuthProvider>
             <Header />
-            <main className="container-mt min-h-[530px]">{children}</main>
+            <main className="container-mt min-h-[650px]">{children}</main>
             <Footer />
             <Toaster />
           </NextAuthProvider>

@@ -154,7 +154,7 @@ export default function Lists({ lists }: Props) {
   };
 
   return (
-    <div className="mt-16">
+    <div className="">
       <div className="flex justify-center gap-4"></div>
       {isCreate && (
         <div className="flex">
