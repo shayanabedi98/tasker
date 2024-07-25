@@ -95,7 +95,7 @@ export default function TaskItem({
         </div>
       )}
       <div
-        className={`flex h-16 w-96 border-2 items-center justify-between rounded-md border-primary bg-secondary p-2 ${isCompletedState ? "" : "border-2 shadow-md"} shadow-neutral-800 transition lg:hover:scale-105 lg:hover:bg-primary`}
+        className={`flex h-16 w-96 items-center justify-between rounded-md border-2 border-primary bg-secondary p-2 ${isCompletedState ? "" : "border-2 shadow-md"} shadow-neutral-800 transition lg:hover:scale-105 lg:hover:bg-primary`}
       >
         <div className="w-full">
           <p
