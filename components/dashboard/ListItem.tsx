@@ -3,7 +3,6 @@
 import { MdEdit } from "react-icons/md";
 import { IoMdTrash } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
-import { IoIosAlert } from "react-icons/io";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useState } from "react";
 import Link from "next/link";
@@ -11,7 +10,6 @@ import Link from "next/link";
 type Props = {
   name: string;
   isEdit: boolean;
-  errorMessage: boolean;
   isLoading: boolean;
   id: string;
   clickedListName: string;
@@ -25,7 +23,6 @@ export default function ListItem({
   isEdit,
   isLoading,
   id,
-  errorMessage,
   clickedListName,
   handleDeleteList,
   handleIsEdit,
@@ -36,16 +33,9 @@ export default function ListItem({
     <div>
       {isEdit && name === clickedListName && (
         <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-slate-600 bg-opacity-50">
-          <div className="relative flex h-96 w-64 flex-col items-center justify-center gap-3 rounded-md bg-bgLight shadow-md">
-            {errorMessage && (
-              <div className="absolute bottom-1 left-0 flex w-full items-center justify-center gap-x-2">
-                <span>Field cannot be empty</span>
-                <IoIosAlert className="text-2xl text-red-500" />
-              </div>
-            )}
+          <div className="px-6 relative flex h-96 w-64 flex-col items-center justify-center gap-3 rounded-md bg-bgLight shadow-md">
             <p className="text-2xl font-semibold">Edit List</p>
             <input
-              className="w-48 rounded-sm px-1 text-black"
               onChange={(e) => {
                 setEditedNameSample(e.target.value);
               }}
@@ -55,10 +45,10 @@ export default function ListItem({
               maxLength={20}
             />
             <div className="flex h-48 w-48 items-center justify-center break-all rounded-md border-2 border-secondary bg-primary p-1 text-center">
-              <span className="text-xl font-semibold">{editedNameSample}</span>
+              <span className="text-xl font-semibold">{editedNameSample ? editedNameSample : name}</span>
             </div>
             <button
-              className="rounded-md border-2 border-secondary bg-primary p-1 text-lg font-semibold"
+              className="btn"
               onClick={() => handleEditList(name, editedNameSample)}
             >
               Update

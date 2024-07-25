@@ -31,7 +31,9 @@ export default async function ListPage({ params }: Props) {
     tasks = await prisma.task.findMany({
       where: { listName: name, listId: list?.id },
     });
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center">

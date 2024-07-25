@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import NextAuthProvider from "@/components/Providers";
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,8 @@ export default function RootLayout({
         <div className="mx-auto min-h-screen max-w-screen-xl">
           <NextAuthProvider>
             <Header />
-            <main className="container-mt">{children}</main>
+            <main className="container-mt min-h-[530px]">{children}</main>
+            <Footer />
             <Toaster />
           </NextAuthProvider>
         </div>

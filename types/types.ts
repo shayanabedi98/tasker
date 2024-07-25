@@ -13,4 +13,5 @@ export type TasksType = {
   title: string;
   description?: string | null;
   listName: string | null;
+  isCompleted: boolean;
 }[];

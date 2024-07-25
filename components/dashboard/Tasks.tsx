@@ -59,6 +59,7 @@ export default function Tasks({ tasks, endpointName }: Props) {
               title: inputValues.title,
               description: inputValues.description,
               listName: endpoint,
+              isCompleted: false,
             },
           ]);
           setInputValues({ title: "", description: "" });
@@ -82,12 +83,14 @@ export default function Tasks({ tasks, endpointName }: Props) {
       toast.error("Missing title field");
       return;
     }
-    
-    if (values.title !== taskName && tasksData.some((i) => i.title === values.title)) {
+
+    if (
+      values.title !== taskName &&
+      tasksData.some((i) => i.title === values.title)
+    ) {
       toast.error("Task name already exists. Pick a new name :)");
       return;
     }
-
 
     if (values.title) {
       try {
@@ -150,6 +153,28 @@ export default function Tasks({ tasks, endpointName }: Props) {
     }
   };
 
+  // TOGGLE ISCOMPLETE
+  const handleIsCompleted = async (bool: boolean, taskName: string) => {
+    try {
+      const res = await fetch(`/api/lists/${endpoint}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          taskName,
+          bool,
+        }),
+      });
+      if (res.ok) {
+        toast.success("Task completed!");
+        router.refresh;
+      }
+    } catch (error) {
+      toast.error("Something went wrong while completing task.");
+    }
+  };
+
   const handleIsEdit = async (name: string) => {
     setIsEdit(!isEdit);
     setClickedTask(name);
@@ -159,11 +184,16 @@ export default function Tasks({ tasks, endpointName }: Props) {
     setInputValues({ ...inputValues, [name]: value });
   };
 
+  const handleIsCreate = () => {
+    setIsCreate(!isCreate)
+  }
+
   return (
     <div className="mt-16">
       <div>
         <CreateTask
           isCreate={isCreate}
+          handleIsCreate={handleIsCreate}
           handleTaskInputChange={handleTaskInputChange}
           handleAddNewTask={handleAddNewTask}
           inputValues={inputValues}
@@ -173,6 +203,8 @@ export default function Tasks({ tasks, endpointName }: Props) {
         {tasksData.map((i, index) => (
           <div key={index} className="flex gap-2">
             <TaskItem
+              isCompleted={i.isCompleted}
+              handleIsCompleted={handleIsCompleted}
               handleDeleteTask={handleDeleteTask}
               handleEditTask={handleEditTask}
               isEdit={isEdit}
@@ -185,7 +217,10 @@ export default function Tasks({ tasks, endpointName }: Props) {
           </div>
         ))}
         <div>
-          <button className="flex h-16 w-96 items-center justify-center rounded-md border-2 border-primary bg-secondary p-1 text-center text-4xl shadow-md shadow-neutral-800 transition lg:hover:scale-105 lg:hover:bg-primary" onClick={() => setIsCreate(true)}>
+          <button
+            className="flex h-16 w-96 items-center justify-center rounded-md border-2 border-primary bg-secondary p-1 text-center text-4xl shadow-md shadow-neutral-800 transition lg:hover:scale-105 lg:hover:bg-primary"
+            onClick={handleIsCreate}
+          >
             <FiPlus />
           </button>
         </div>

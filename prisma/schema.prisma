@@ -88,6 +88,7 @@ model Task {
   listId      String  @db.ObjectId
   List        List    @relation(fields: [listId], references: [id])
   listName    String
+  isCompleted Boolean
 }
 
 model List {

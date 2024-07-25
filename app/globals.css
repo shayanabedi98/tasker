@@ -28,5 +28,9 @@ h2 {
 }
 
 input {
-  @apply text-black;
+  @apply h-6 w-full rounded-sm px-1 text-sm text-black;
+}
+
+button.btn {
+  @apply rounded-md border-2 border-secondary bg-primary px-2 py-1 text-base font-semibold transition lg:hover:bg-text lg:hover:text-primary min-w-32 min-h-11;
 }

@@ -51,6 +51,7 @@ export async function POST(
         description: inputValues.description || null,
         listId: list?.id,
         listName: name,
+        isCompleted: false,
       },
     });
     return NextResponse.json(task);
@@ -66,7 +67,7 @@ export async function PUT(
 ) {
   const session = await getServerSession(authOptions);
   const { name } = params;
-  const { values, taskName } = await req.json();
+  const { values, taskName, bool } = await req.json();
 
   try {
     const user = await prisma.user.findUnique({
@@ -84,14 +85,27 @@ export async function PUT(
       where: { listId: list?.id, title: taskName },
     });
 
-    const updateTask = await prisma.task.update({
-      where: { id: task?.id, listId: list?.id },
-      data: {
-        title: values.title,
-        description: values.description,
-      },
-    });
-    return NextResponse.json(updateTask);
+    if (bool !== true && bool !== false) {
+      const updateTask = await prisma.task.update({
+        where: { id: task?.id, listId: list?.id },
+        data: {
+          title: values.title,
+          description: values.description,
+        },
+      });
+      return NextResponse.json(updateTask);
+    }
+
+    if (bool === true || bool === false) {
+      const toggleComplete = await prisma.task.update({
+        where: { listId: list.id, id: task?.id },
+        data: {
+          isCompleted: bool,
+        },
+      });
+
+      return NextResponse.json(toggleComplete);
+    }
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "Could not update task." });

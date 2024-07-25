@@ -16,7 +16,6 @@ type Props = {
 export default function Lists({ lists }: Props) {
   const [listsData, setListsData] = useState(lists);
   const [inputValue, setInputValue] = useState("");
-  const [errorMessage, setErrorMessage] = useState(false);
   const [isCreate, setIsCreate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -25,10 +24,8 @@ export default function Lists({ lists }: Props) {
 
   const handleAddNewList = async () => {
     if (!inputValue.trim()) {
-      setErrorMessage(true);
+      toast.error("List name cannot be empty.")
       return;
-    } else {
-      setErrorMessage(false);
     }
 
     if (listsData.some((i) => i.name === inputValue)) {
@@ -69,9 +66,9 @@ export default function Lists({ lists }: Props) {
 
   const handleEditList = async (listName: string, newListName: string) => {
     if (!newListName) {
-      setErrorMessage(true);
+      toast.error("List name cannot be empty.")
     } else {
-      setErrorMessage(false);
+
     }
 
     if (listsData.some((i) => i.name === newListName)) {
@@ -162,7 +159,6 @@ export default function Lists({ lists }: Props) {
       {isCreate && (
         <div className="flex">
           <CreateList
-            errorMessage={errorMessage}
             handleIsCreate={handleIsCreate}
             inputValue={inputValue}
             handleListInputChange={handleListInputChange}
@@ -173,7 +169,6 @@ export default function Lists({ lists }: Props) {
       <div className="mt-16 grid grid-cols-4 gap-10">
         {listsData.map((i, index) => (
           <ListItem
-            errorMessage={errorMessage}
             handleEditList={handleEditList}
             isEdit={isEdit}
             clickedListName={clickedListName}
