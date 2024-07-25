@@ -51,6 +51,8 @@ export default function Tasks({ tasks, endpointName }: Props) {
         });
 
         if (res.ok) {
+          console.log(decodeURIComponent(endpoint));
+          
           toast.success("Created New Task");
           setTasksData((prev) => [
             ...prev,

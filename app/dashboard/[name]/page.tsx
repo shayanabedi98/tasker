@@ -25,11 +25,11 @@ export default async function ListPage({ params }: Props) {
     });
 
     const list = await prisma.list.findFirst({
-      where: { name: name, userId: user?.id },
+      where: { name: decodeURIComponent(name), userId: user?.id },
     });
 
     tasks = await prisma.task.findMany({
-      where: { listName: name, listId: list?.id },
+      where: { listName: decodeURIComponent(name), listId: list?.id },
     });
   } catch (error) {
     throw error;
